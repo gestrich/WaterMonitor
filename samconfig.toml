@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "water-monitor"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1jr4wgns7wi4m"
+s3_prefix = "water-monitor"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"

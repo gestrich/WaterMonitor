@@ -1,0 +1,4 @@
+.swiftpm/
+.build/
+.aws-sam/
+.DS_Store

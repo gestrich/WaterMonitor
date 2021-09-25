@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Swift Application
+
+Globals:
+  Function:
+    Timeout: 10
+    CodeUri: . 
+    Handler: swift.bootstrap
+    Runtime: provided.al2
+    MemorySize: 512
+
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: WaterMonitor
+      AttributeDefinitions:
+        - AttributeName: partitionKey
+          AttributeType: S
+        - AttributeName: sort
+          AttributeType: S
+      KeySchema:
+        - AttributeName: partitionKey
+          KeyType: HASH
+        - AttributeName: sort
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  WaterMonitor:
+    Type: AWS::Serverless::Function
+    Properties:
+      Events:
+        WaterReadingPost:
+          Type: Api
+          Properties:
+            Path: /waterReading
+            Method: post
+        WaterReadingGet:
+          Type: Api
+          Properties:
+            Path: /waterReading
+            Method: get
+      Policies:
+      - AmazonDynamoDBFullAccess
+    Metadata:
+      BuildMethod: makefile
+
+Outputs:
+  ApiEndpoint:
+    Description: "API endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
