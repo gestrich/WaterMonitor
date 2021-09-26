@@ -47,6 +47,7 @@ while true; do
     timeStamp="$(echo "$json" | jq -r .Time)"
     consumption="$(echo "$json" | jq .Message.Consumption)"
     echo  "$(generate_post_data $timeStamp $consumption)"
+    #In your bashrc, put something like export WATER_MONITOR_URL=<URL to your lambda service>
     curl -X POST -H "Content-Type: application/json" "${WATER_MONITOR_URL}" \
     --data "$(generate_post_data $timeStamp $consumption)"
 
