@@ -9,7 +9,9 @@ let package = Package(
         .macOS(.v10_15)
     ],
     products: [
-        //TODO: Probably need to add product here for client to be used outside this project???
+        .library(
+            name: "WaterMonitorClient",
+            targets: ["WaterMonitorClient"]),
     ],
     dependencies: [
         .package(url: "https://github.com/swift-server/swift-aws-lambda-runtime.git", .upToNextMajor(from:"0.4.0")),
