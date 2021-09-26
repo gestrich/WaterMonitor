@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WaterMonitorClient: ObservableObject {
+class WaterMonitorClient {
 
     let urlString: String
     
