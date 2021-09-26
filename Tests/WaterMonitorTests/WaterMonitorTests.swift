@@ -3,7 +3,7 @@ import class Foundation.Bundle
 @testable import AWSLambdaEvents
 @testable import AWSLambdaRuntime
 @testable import AWSLambdaTesting
-@testable import WaterMonitor
+//@testable import WaterMonitorClient
 
 final class WaterMonitorTests: XCTestCase {
     

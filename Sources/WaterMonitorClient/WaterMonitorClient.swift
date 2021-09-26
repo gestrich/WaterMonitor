@@ -7,19 +7,19 @@
 
 import Foundation
 
-class WaterMonitorClient {
+public class WaterMonitorClient {
 
-    let urlString: String
+    public let urlString: String
     
-    enum WaterFetchError: LocalizedError {
+    public enum WaterFetchError: LocalizedError {
         case genericError(String)
     }
     
-    init(urlString: String) {
+    public init(urlString: String) {
         self.urlString = urlString
     }
     
-    func fetchLatestReadings(completion: @escaping (Result<[WaterReading], Error>) -> Void) {
+    public func fetchLatestReadings(completion: @escaping (Result<[WaterReading], Error>) -> Void) {
 
         if let url = URL(string: urlString) {
             let urlSession = URLSession(configuration: .default).dataTask(with: url) { (data, response, error) in
