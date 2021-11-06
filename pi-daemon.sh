@@ -41,7 +41,7 @@ while true; do
        
   sleep 10 #Let rtl_tcp startup and open a port
 
-  json="$(sudo /home/pi/go/bin/rtlamr -msgtype=r900 -filterid=$METERID -single=true -format=json)"
+  json="$(sudo /Users/bill/go/bin/rtlamr -msgtype=r900 -filterid=$METERID -single=true -format=json -unique=true)"
 
   echo "Meter info: $json"
 
@@ -54,12 +54,14 @@ while true; do
     echo "Logging to API"
     echo  "$(generate_post_data $timeStamp $consumption)"
     #In your bashrc, put something like export WATER_MONITOR_URL=<URL to your lambda service>
+    WATER_MONITOR_URL="https://eo2gdd7nhj.execute-api.us-east-1.amazonaws.com/Prod/waterReading"
     curl -X POST -H "Content-Type: application/json" "${WATER_MONITOR_URL}" \
     --data "$(generate_post_data $timeStamp $consumption)"
   fi
 
   lastConsumption="$consumption"
 
+  #kill $rtl_tcp_pid || true # rtl_tcp has a memory leak and hangs after frequent use, restarts required - https://github.com/bemasher/rtlamr/issues/49
   pkill -9 rtl_tcp || true # rtl_tcp has a memory leak and hangs after frequent use, restarts required - https://github.com/bemasher/rtlamr/issues/49
 
 done
