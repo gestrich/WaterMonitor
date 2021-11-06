@@ -41,7 +41,7 @@ while true; do
        
   sleep 10 #Let rtl_tcp startup and open a port
 
-  json="$(sudo /Users/bill/go/bin/rtlamr -msgtype=r900 -filterid=$METERID -single=true -format=json -unique=true)"
+  json="$(sudo /home/pi/go/bin/rtlamr -msgtype=r900 -filterid=$METERID -single=true -format=json -unique=true)"
 
   echo "Meter info: $json"
 

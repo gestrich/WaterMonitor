@@ -2,7 +2,7 @@
 
 ## Starting as Service on boot
 
-cp water-monitor.service /etc/systemd/system/water-monitor.service
+sudo cp water-monitor.service /etc/systemd/system/water-monitor.service
 sudo systemctl enable water-monitor.service 
 
 ## Debugging Service
