@@ -33,27 +33,33 @@ fi
 UNIT_DIVISOR=10000
 UNIT="CCF" # Hundred cubic feet
 
+lastConsumption=0
 while true; do
   # Suppress the very verbose output of rtl_tcp and background the process
   rtl_tcp &> /dev/null &
   rtl_tcp_pid=$! # Save the pid for murder later
+       
   sleep 10 #Let rtl_tcp startup and open a port
 
   json="$(sudo /home/pi/go/bin/rtlamr -msgtype=r900 -filterid=$METERID -single=true -format=json)"
 
   echo "Meter info: $json"
 
-    echo "Logging to custom API"
-    timeStamp="$(echo "$json" | jq -r .Time)"
-    consumption="$(echo "$json" | jq .Message.Consumption)"
+  timeStamp="$(echo "$json" | jq -r .Time)"
+  consumption="$(echo "$json" | jq .Message.Consumption)"
+
+  if [ "$consumption" = "$lastConsumption" ]; then
+    echo "Consumption Didn't Change."
+  else
+    echo "Logging to API"
     echo  "$(generate_post_data $timeStamp $consumption)"
     #In your bashrc, put something like export WATER_MONITOR_URL=<URL to your lambda service>
     curl -X POST -H "Content-Type: application/json" "${WATER_MONITOR_URL}" \
     --data "$(generate_post_data $timeStamp $consumption)"
+  fi
 
-  kill $rtl_tcp_pid # rtl_tcp has a memory leak and hangs after frequent use, restarts required - https://github.com/bemasher/rtlamr/issues/49
+  lastConsumption="$consumption"
 
-  #Going to try without the sleep - This may be required for the tcp call to work though
-  #sleep 60
+  pkill -9 rtl_tcp || true # rtl_tcp has a memory leak and hangs after frequent use, restarts required - https://github.com/bemasher/rtlamr/issues/49
 
 done
