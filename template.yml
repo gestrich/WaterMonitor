@@ -28,20 +28,33 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+  WaterMonitorAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'content-type'"
+        AllowOrigin: "'*'"
+        AllowCredentials: "'*'"
   WaterMonitor:
     Type: AWS::Serverless::Function
     Properties:
+      Architectures:
+      - arm64
       Events:
         WaterReadingPost:
           Type: Api
           Properties:
             Path: /waterReading
             Method: post
+            RestApiId: !Ref WaterMonitorAPI
         WaterReadingGet:
           Type: Api
           Properties:
             Path: /waterReading
             Method: get
+            RestApiId: !Ref WaterMonitorAPI
       Policies:
       - AmazonDynamoDBFullAccess
     Metadata:
@@ -50,4 +63,4 @@ Resources:
 Outputs:
   ApiEndpoint:
     Description: "API endpoint URL"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Value: !Sub "https://${WaterMonitorAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"

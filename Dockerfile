@@ -1,4 +1,4 @@
- FROM swiftlang/swift:nightly-5.4-amazonlinux2
+FROM swift:5.6.1-amazonlinux2
 
  RUN yum -y install \
      git \
