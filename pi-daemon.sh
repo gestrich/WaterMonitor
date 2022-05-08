@@ -54,7 +54,7 @@ while true; do
     echo "Logging to API"
     echo  "$(generate_post_data $timeStamp $consumption)"
     #In your bashrc, put something like export WATER_MONITOR_URL=<URL to your lambda service>
-    WATER_MONITOR_URL="https://eo2gdd7nhj.execute-api.us-east-1.amazonaws.com/Prod/waterReading"
+    WATER_MONITOR_URL="https://1im6bysrn8.execute-api.us-east-1.amazonaws.com/Prod/waterReading"
     curl -X POST -H "Content-Type: application/json" "${WATER_MONITOR_URL}" \
     --data "$(generate_post_data $timeStamp $consumption)"
   fi
